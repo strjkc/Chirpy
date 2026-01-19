@@ -1,15 +1,24 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"sync/atomic"
+
+	"github.com/joho/godotenv"
+
+	_ "github.com/lib/pq"
+
+	"github.com/strjkc/chirpy/internal/database"
 )
 
 type apiConfig struct {
 	fileserverHits atomic.Int32
+	db             *database.Queries
 }
 
 func readinessHandler(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +123,18 @@ func handlerPostChirp(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		panic(err)
+	}
+	dbURL := os.Getenv("DB_URL")
+	db, err := sql.Open("posgres", dbURL)
+	if err != nil {
+		panic(err)
+	}
+	dbQueries := database.New(db)
 	cfg := apiConfig{}
+	cfg.db = dbQueries
 	mux := http.NewServeMux()
 	mux.Handle("/app/", http.StripPrefix("/app/", cfg.middlewareMetricsInc(http.FileServer(http.Dir(".")))))
 	mux.HandleFunc("POST /api/validate_chirp", handlerPostChirp)
@@ -125,7 +145,7 @@ func main() {
 		Addr:    ":8080",
 		Handler: mux,
 	}
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		panic(err)
 	}
