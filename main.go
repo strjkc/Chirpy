@@ -8,6 +8,9 @@ import (
 	"os"
 	"strings"
 	"sync/atomic"
+	"time"
+
+	"github.com/google/uuid"
 
 	"github.com/joho/godotenv"
 
@@ -48,6 +51,7 @@ func (cfg *apiConfig) metricsHandler(w http.ResponseWriter, r *http.Request) {
 
 func (cfg *apiConfig) resetHandler(w http.ResponseWriter, r *http.Request) {
 	cfg.fileserverHits.Store(0)
+	cfg.db.DeleteAll(r.Context())
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte("Data Reset!"))
@@ -122,13 +126,198 @@ func handlerPostChirp(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
+	type req struct {
+		Email string `json:"email"`
+	}
+
+	type res struct {
+		ID        string `json:"id"`
+		CreatedAt string `json:"created_at"`
+		UpdatedAt string `json:"updated_at"`
+		Email     string `json:"email"`
+	}
+
+	request := req{}
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&request)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	params := database.CreateUserParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Email:     request.Email,
+	}
+
+	createdUser, err := cfg.db.CreateUser(r.Context(), params)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	response := res{
+		ID:        createdUser.ID.String(),
+		CreatedAt: createdUser.CreatedAt.String(),
+		UpdatedAt: createdUser.UpdatedAt.String(),
+		Email:     createdUser.Email,
+	}
+
+	data, err := json.Marshal(response)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(data)
+}
+
+func (cfg *apiConfig) createChirpHandler(w http.ResponseWriter, r *http.Request) {
+	type request struct {
+		Body   string `json:"body"`
+		UserID string `json:"user_id"`
+	}
+
+	type response struct {
+		ID        string `json:"id"`
+		CreatedAt string `json:"created_at"`
+		UpdatedAt string `json:"updated_at"`
+		Body      string `json:"body"`
+		UserID    string `json:"user_id"`
+	}
+
+	req := request{}
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&req)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	parsedUUID, err := uuid.Parse(req.UserID)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	if len(req.Body) < 1 {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	params := database.CreateChirpParams{
+		Body:   req.Body,
+		UserID: parsedUUID,
+	}
+
+	data, err := cfg.db.CreateChirp(r.Context(), params)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	resp := response{
+		ID:        data.ID.String(),
+		CreatedAt: data.CreatedAt.String(),
+		UpdatedAt: data.UpdatedAt.String(),
+		Body:      data.Body,
+		UserID:    data.UserID.String(),
+	}
+
+	resp1, err := json.Marshal(resp)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(resp1)
+}
+
+type Chirp struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	Body      string `json:"body"`
+	UserID    string `json:"user_id"`
+}
+
+func (cfg *apiConfig) getChirpHandler(w http.ResponseWriter, r *http.Request) {
+	chirpId, err := uuid.Parse(r.PathValue("chirpID"))
+	if err != nil {
+		fmt.Println("error parsing uuid")
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	dbChirp, err := cfg.db.GetChirp(r.Context(), chirpId)
+	if err != nil {
+		fmt.Println("error fetching from db")
+		jsonResponseError(w, 404, "Chirp not found")
+		return
+	}
+
+	respChirp := Chirp{
+		ID:        dbChirp.ID.String(),
+		CreatedAt: dbChirp.CreatedAt.String(),
+		UpdatedAt: dbChirp.UpdatedAt.String(),
+		Body:      dbChirp.Body,
+		UserID:    dbChirp.UserID.String(),
+	}
+
+	resp, err := json.Marshal(respChirp)
+	if err != nil {
+		fmt.Println("error marshaling")
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
+}
+
+func (cfg *apiConfig) getChirpsHandler(w http.ResponseWriter, r *http.Request) {
+	chirps, err := cfg.db.GetChirps(r.Context())
+	if err != nil {
+		jsonResponseError(w, 404, "Chirps not found")
+		return
+	}
+
+	respChirps := make([]Chirp, 0)
+	for _, chirp := range chirps {
+		c := Chirp{
+			ID:        chirp.ID.String(),
+			CreatedAt: chirp.CreatedAt.String(),
+			UpdatedAt: chirp.UpdatedAt.String(),
+			Body:      chirp.Body,
+			UserID:    chirp.UserID.String(),
+		}
+		respChirps = append(respChirps, c)
+	}
+
+	resp, err := json.Marshal(respChirps)
+	if err != nil {
+		jsonResponseError(w, 500, "An Error occured")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
+}
+
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		panic(err)
 	}
 	dbURL := os.Getenv("DB_URL")
-	db, err := sql.Open("posgres", dbURL)
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		panic(err)
 	}
@@ -138,6 +327,10 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/app/", http.StripPrefix("/app/", cfg.middlewareMetricsInc(http.FileServer(http.Dir(".")))))
 	mux.HandleFunc("POST /api/validate_chirp", handlerPostChirp)
+	mux.HandleFunc("POST /api/users", cfg.usersHandler)
+	mux.HandleFunc("POST /api/chirps", cfg.createChirpHandler)
+	mux.HandleFunc("GET /api/chirps/{chirpID}", cfg.getChirpHandler)
+	mux.HandleFunc("GET /api/chirps", cfg.getChirpsHandler)
 	mux.HandleFunc("GET /api/healthz", readinessHandler)
 	mux.HandleFunc("GET /admin/metrics", cfg.metricsHandler)
 	mux.HandleFunc("POST /admin/reset", cfg.resetHandler)
