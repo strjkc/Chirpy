@@ -1,0 +1,1195 @@
+[?25l[?2004h╭───────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/admin/reset │
+╰┬──────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to walt@breakingbad.com
+ ├─  *  Saving `waltID` from `.id`
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  *  Saving `waltAccessToken` from `.token`
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to I'm the one who knocks!
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Gale!
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerID` from `.id`
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerAccessToken` from `.token`
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Mr President....
+╭─────────────────────────────────────────────────────────────╮
+│ ⣽  GET http://localhost:8080/api/chirps?author_id=${waltID} │
+╰┬────────────────────────────────────────────────────────────╯
+[45A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ?  GET http://localhost:8080/api/chirps?author_id=${waltID} │
+
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: I'm the one who knocks!
+ ├─  ?  Expecting body to contain: Gale!
+ ├─  ?  Expecting JSON body to not contain: Mr President....
+╭───────────────────────────────────────────────────────────────╮
+│ ⣽  GET http://localhost:8080/api/chirps?author_id=${skylerID} │
+╰┬──────────────────────────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: Mr President....
+ ├─  ?  Expecting JSON body to not contain: I'm the one who knocks!
+ ├─  ?  Expecting JSON body to not contain: Gale!
+[56A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ?  GET http://localhost:8080/api/chirps?author_id=${skylerID} │
+
+
+
+
+
+[56A [J[2K[?2004l[?25h[?1002l[?1003l[?1006l╭───────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/admin/reset │
+╰┬──────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/admin/reset&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;0<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭─────────────────────────────────────────╮
+│ X  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  X  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to walt@breakingbad.com
+ ├─  *  Saving `waltID` from `.id`
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/users&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;52<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;email&quot;:&quot;walt@breakingbad.com&quot;,&quot;password&quot;:&quot;123456&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  *  Saving `waltAccessToken` from `.token`
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/login&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;52<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;email&quot;:&quot;walt@breakingbad.com&quot;,&quot;password&quot;:&quot;123456&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to I'm the one who knocks!
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/chirps&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;34<br>
+Authorization:&nbsp;Bearer&nbsp;${waltAccessToken}<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;body&quot;:&quot;I'm&nbsp;the&nbsp;one&nbsp;who&nbsp;knocks!&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Gale!
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/chirps&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;16<br>
+Authorization:&nbsp;Bearer&nbsp;${waltAccessToken}<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;body&quot;:&quot;Gale!&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerID` from `.id`
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/users&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;54<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;email&quot;:&quot;skyler@breakingbad.com&quot;,&quot;password&quot;:&quot;000111&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭─────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerAccessToken` from `.token`
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/login&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;54<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;email&quot;:&quot;skyler@breakingbad.com&quot;,&quot;password&quot;:&quot;000111&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Mr President....
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">POST&nbsp;/api/chirps&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Content-Length:&nbsp;27<br>
+Authorization:&nbsp;Bearer&nbsp;${skylerAccessToken}<br>
+Content-Type:&nbsp;application/json<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+{&quot;body&quot;:&quot;Mr&nbsp;President....&quot;}</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭─────────────────────────────────────────────────────────────╮
+│ ?  GET http://localhost:8080/api/chirps?author_id=${waltID} │
+╰┬────────────────────────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: I'm the one who knocks!
+ ├─  ?  Expecting body to contain: Gale!
+ ├─  ?  Expecting JSON body to not contain: Mr President....
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">GET&nbsp;/api/chirps?author_id=${waltID}&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+╭───────────────────────────────────────────────────────────────╮
+│ ?  GET http://localhost:8080/api/chirps?author_id=${skylerID} │
+╰┬──────────────────────────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: Mr President....
+ ├─  ?  Expecting JSON body to not contain: I'm the one who knocks!
+ ├─  ?  Expecting JSON body to not contain: Gale!
+  Response Status Code: 200
+  Response Body: 
+<html><head><title>Burp Suite Community Edition</title>
+<style type="text/css">
+body { background: #dedede; font-family: Arial, sans-serif; color: #404042; -webkit-font-smoothing: antialiased; }
+#container { padding: 0 15px; margin: 10px auto; background-color: #ffffff; }
+a { word-wrap: break-word; }
+a:link, a:visited { color: #e06228; text-decoration: none; }
+a:hover, a:active { color: #404042; text-decoration: underline; }
+h1 { font-size: 1.6em; line-height: 1.2em; font-weight: normal; color: #404042; }
+h2 { font-size: 1.3em; line-height: 1.2em; padding: 0; margin: 0.8em 0 0.3em 0; font-weight: normal; color: #404042;}
+.title, .navbar { color: #ffffff; background: #e06228; padding: 10px 15px; margin: 0 -15px 10px -15px; overflow: hidden; }
+.title h1 { color: #ffffff; padding: 0; margin: 0; font-size: 1.8em; }
+div.navbar {position: absolute; top: 18px; right: 25px;}
+div.navbar ul {list-style-type: none; margin: 0; padding: 0;}
+div.navbar li {display: inline; margin-left: 20px;}
+div.navbar a {color: white; padding: 10px}
+div.navbar a:hover, div.navbar a:active {text-decoration: none; background: #404042;}
+</style>
+</head>
+<body>
+<div id="container">
+<div class="title"><h1>Burp Suite Community Edition</h1></div>
+<h1>Error</h1><p>Invalid&#32;client&#32;request&#32;received&#58;&#32;First&#32;line&#32;of&#32;request&#32;did&#32;not&#32;contain&#32;an&#32;absolute&#32;URL&#32;&#45;&#32;try&#32;enabling&#32;invisible&#32;proxy&#32;support&#46;</p>
+<div class="request">GET&nbsp;/api/chirps?author_id=${skylerID}&nbsp;HTTP/1.1<br>
+Host:&nbsp;localhost:8080<br>
+User-Agent:&nbsp;Go-http-client/1.1<br>
+Accept-Encoding:&nbsp;gzip<br>
+<br>
+</div><p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+
+
+
+Tests failed! ❌              
+              
+Failed Step: 2                                        
+Error: expected status code 201, got 200
+
+[?25l[?2004h╭───────────────────────────────────────────╮
+│ ⣽  POST http://localhost:8080/admin/reset │
+╰┬──────────────────────────────────────────╯
+[3A
+│ ?  POST http://localhost:8080/admin/reset │
+
+ ├─  ?  Expecting status code: 200
+╭─────────────────────────────────────────╮
+│ ⣽  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  *  Saving `waltID` from `.id`
+[8A
+
+
+
+
+│ ⣻  POST http://localhost:8080/api/users │
+
+
+[8A
+
+
+
+
+│ ?  POST http://localhost:8080/api/users │
+
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to walt@breakingbad.com
+ ├─  *  Saving `waltID` from `.id`
+╭─────────────────────────────────────────╮
+│ ⣻  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  *  Saving `waltAccessToken` from `.token`
+[14A
+
+
+
+
+
+
+
+
+
+
+│ ⢿  POST http://localhost:8080/api/login │
+
+
+[14A
+
+
+
+
+
+
+
+
+
+
+│ ⡿  POST http://localhost:8080/api/login │
+
+
+[14A
+
+
+
+
+
+
+
+
+
+
+│ ?  POST http://localhost:8080/api/login │
+
+ ├─  ?  Expecting status code: 200
+ ├─  *  Saving `waltAccessToken` from `.token`
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to I'm the one who knocks!
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Gale!
+╭─────────────────────────────────────────╮
+│ ⡿  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  *  Saving `skylerID` from `.id`
+[29A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ⣟  POST http://localhost:8080/api/users │
+
+
+[29A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ⣯  POST http://localhost:8080/api/users │
+
+
+[29A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ?  POST http://localhost:8080/api/users │
+
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerID` from `.id`
+╭─────────────────────────────────────────╮
+│ ⣯  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  *  Saving `skylerAccessToken` from `.token`
+[35A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ⣷  POST http://localhost:8080/api/login │
+
+
+[35A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ⣾  POST http://localhost:8080/api/login │
+
+
+[35A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ├─  ⣾  Expecting status code: 200
+ ├─  *  Saving `skylerAccessToken` from `.token`
+[36A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+│ ?  POST http://localhost:8080/api/login │
+
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerAccessToken` from `.token`
+╭──────────────────────────────────────────╮
+│ ?  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 201
+ ├─  ?  Expecting JSON at .body to be equal to Mr President....
+╭────────────────────────────────────────────────────────────────────────────────────────╮
+│ ?  GET http://localhost:8080/api/chirps?author_id=cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e │
+╰┬───────────────────────────────────────────────────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: I'm the one who knocks!
+ ├─  ?  Expecting body to contain: Gale!
+ ├─  ?  Expecting JSON body to not contain: Mr President....
+╭────────────────────────────────────────────────────────────────────────────────────────╮
+│ ?  GET http://localhost:8080/api/chirps?author_id=1812c44c-96b7-46d3-addb-c20a7fb35f76 │
+╰┬───────────────────────────────────────────────────────────────────────────────────────╯
+ ├─  ?  Expecting status code: 200
+ ├─  ?  Expecting body to contain: Mr President....
+ ├─  ?  Expecting JSON body to not contain: I'm the one who knocks!
+ ├─  ?  Expecting JSON body to not contain: Gale!
+[56A
+│ ✓  POST http://localhost:8080/admin/reset │
+
+ ├─  ✓  Expecting status code: 200
+
+│ ✓  POST http://localhost:8080/api/users │
+
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .email to be equal to walt@breakingbad.com
+
+
+│ ✓  POST http://localhost:8080/api/login │
+
+ ├─  ✓  Expecting status code: 200
+
+
+│ ✓  POST http://localhost:8080/api/chirps │
+
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to I'm the one who knocks!
+
+│ ✓  POST http://localhost:8080/api/chirps │
+
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to Gale!
+
+│ ✓  POST http://localhost:8080/api/users │
+
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .email to be equal to skyler@breakingbad.com
+
+
+│ ✓  POST http://localhost:8080/api/login │
+
+ ├─  ✓  Expecting status code: 200
+ ├─  ✓  Expecting JSON at .email to be equal to skyler@breakingbad.com
+
+
+│ ✓  POST http://localhost:8080/api/chirps │
+
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to Mr President....
+
+│ ✓  GET http://localhost:8080/api/chirps?author_id=cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e │
+
+ ├─  ✓  Expecting status code: 200
+ ├─  ✓  Expecting body to contain: I'm the one who knocks!
+ ├─  ✓  Expecting body to contain: Gale!
+ ├─  ✓  Expecting JSON body to not contain: Mr President....
+
+│ ✓  GET http://localhost:8080/api/chirps?author_id=1812c44c-96b7-46d3-addb-c20a7fb35f76 │
+
+ ├─  ✓  Expecting status code: 200
+
+
+
+[56A [J[2K[?2004l[?25h[?1002l[?1003l[?1006l╭───────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/admin/reset │
+╰┬──────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+  Response Status Code: 200
+  Response Body: 
+Data Reset!
+
+╭─────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .email to be equal to walt@breakingbad.com
+ ├─  *  Saving `waltID` from `.id`
+  Response Status Code: 201
+  Response Body: 
+{
+  "created_at": "2026-01-25 19:05:10.898909 +0000 +0000",
+  "email": "walt@breakingbad.com",
+  "id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e",
+  "is_chirpy_red": false,
+  "updated_at": "2026-01-25 19:05:10.898909 +0000 +0000"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+
+╭─────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+ ├─  *  Saving `waltAccessToken` from `.token`
+  Response Status Code: 200
+  Response Body: 
+{
+  "created_at": "2026-01-25 19:05:10.898909 +0000 +0000",
+  "email": "walt@breakingbad.com",
+  "id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e",
+  "is_chirpy_red": false,
+  "refresh_token": "a07cfec10398d27690ddcd37f67c2703bd84ce572344e66109d3e49b4ae9e292",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o",
+  "updated_at": "2026-01-25 19:05:10.898909 +0000 +0000"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+
+╭──────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to I'm the one who knocks!
+  Response Status Code: 201
+  Response Body: 
+{
+  "body": "I'm the one who knocks!",
+  "created_at": "2026-01-25 19:05:11.083395 +0000 +0000",
+  "id": "c35cbe95-3343-4ef0-8263-2ad74ddb56c5",
+  "updated_at": "2026-01-25 19:05:11.083395 +0000 +0000",
+  "user_id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+
+╭──────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to Gale!
+  Response Status Code: 201
+  Response Body: 
+{
+  "body": "Gale!",
+  "created_at": "2026-01-25 19:05:11.088923 +0000 +0000",
+  "id": "876f62f4-ac8d-47b5-9e23-c7973e8a5b06",
+  "updated_at": "2026-01-25 19:05:11.088923 +0000 +0000",
+  "user_id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+
+╭─────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/users │
+╰┬────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerID` from `.id`
+  Response Status Code: 201
+  Response Body: 
+{
+  "created_at": "2026-01-25 19:05:11.255487 +0000 +0000",
+  "email": "skyler@breakingbad.com",
+  "id": "1812c44c-96b7-46d3-addb-c20a7fb35f76",
+  "is_chirpy_red": false,
+  "updated_at": "2026-01-25 19:05:11.255487 +0000 +0000"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+   - skylerID: 1812c44c-96b7-46d3-addb-c20a7fb35f76
+
+╭─────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/login │
+╰┬────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+ ├─  ✓  Expecting JSON at .email to be equal to skyler@breakingbad.com
+ ├─  *  Saving `skylerAccessToken` from `.token`
+  Response Status Code: 200
+  Response Body: 
+{
+  "created_at": "2026-01-25 19:05:11.255487 +0000 +0000",
+  "email": "skyler@breakingbad.com",
+  "id": "1812c44c-96b7-46d3-addb-c20a7fb35f76",
+  "is_chirpy_red": false,
+  "refresh_token": "4a554937bca4038eba9a77f6bbbddfefd8fc91c3a13779a49a0c52f6efc4c61a",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiIxODEyYzQ0Yy05NmI3LTQ2ZDMtYWRkYi1jMjBhN2ZiMzVmNzYiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.jSzXuvBlDagoBlzPgQjCAUMEu5Fk0u_xFOQzJuNptmY",
+  "updated_at": "2026-01-25 19:05:11.255487 +0000 +0000"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+   - skylerID: 1812c44c-96b7-46d3-addb-c20a7fb35f76
+   - skylerAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiIxODEyYzQ0Yy05NmI3LTQ2ZDMtYWRkYi1jMjBhN2ZiMzVmNzYiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.jSzXuvBlDagoBlzPgQjCAUMEu5Fk0u_xFOQzJuNptmY
+
+╭──────────────────────────────────────────╮
+│ ✓  POST http://localhost:8080/api/chirps │
+╰┬─────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 201
+ ├─  ✓  Expecting JSON at .body to be equal to Mr President....
+  Response Status Code: 201
+  Response Body: 
+{
+  "body": "Mr President....",
+  "created_at": "2026-01-25 19:05:11.446933 +0000 +0000",
+  "id": "d44d7d3c-f8f1-461b-b411-3767d8c6c945",
+  "updated_at": "2026-01-25 19:05:11.446933 +0000 +0000",
+  "user_id": "1812c44c-96b7-46d3-addb-c20a7fb35f76"
+}
+  Variables available: 
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+   - skylerID: 1812c44c-96b7-46d3-addb-c20a7fb35f76
+   - skylerAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiIxODEyYzQ0Yy05NmI3LTQ2ZDMtYWRkYi1jMjBhN2ZiMzVmNzYiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.jSzXuvBlDagoBlzPgQjCAUMEu5Fk0u_xFOQzJuNptmY
+
+╭────────────────────────────────────────────────────────────────────────────────────────╮
+│ ✓  GET http://localhost:8080/api/chirps?author_id=cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e │
+╰┬───────────────────────────────────────────────────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+ ├─  ✓  Expecting body to contain: I'm the one who knocks!
+ ├─  ✓  Expecting body to contain: Gale!
+ ├─  ✓  Expecting JSON body to not contain: Mr President....
+  Response Status Code: 200
+  Response Body: 
+[
+  {
+    "body": "I'm the one who knocks!",
+    "created_at": "2026-01-25 19:05:11.083395 +0000 +0000",
+    "id": "c35cbe95-3343-4ef0-8263-2ad74ddb56c5",
+    "updated_at": "2026-01-25 19:05:11.083395 +0000 +0000",
+    "user_id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e"
+  },
+  {
+    "body": "Gale!",
+    "created_at": "2026-01-25 19:05:11.088923 +0000 +0000",
+    "id": "876f62f4-ac8d-47b5-9e23-c7973e8a5b06",
+    "updated_at": "2026-01-25 19:05:11.088923 +0000 +0000",
+    "user_id": "cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e"
+  }
+]
+  Variables available: 
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+   - skylerID: 1812c44c-96b7-46d3-addb-c20a7fb35f76
+   - skylerAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiIxODEyYzQ0Yy05NmI3LTQ2ZDMtYWRkYi1jMjBhN2ZiMzVmNzYiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.jSzXuvBlDagoBlzPgQjCAUMEu5Fk0u_xFOQzJuNptmY
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+
+╭────────────────────────────────────────────────────────────────────────────────────────╮
+│ ✓  GET http://localhost:8080/api/chirps?author_id=1812c44c-96b7-46d3-addb-c20a7fb35f76 │
+╰┬───────────────────────────────────────────────────────────────────────────────────────╯
+ ├─  ✓  Expecting status code: 200
+ ├─  ✓  Expecting body to contain: Mr President....
+ ├─  ✓  Expecting JSON body to not contain: I'm the one who knocks!
+ ├─  ✓  Expecting JSON body to not contain: Gale!
+  Response Status Code: 200
+  Response Body: 
+[
+  {
+    "body": "Mr President....",
+    "created_at": "2026-01-25 19:05:11.446933 +0000 +0000",
+    "id": "d44d7d3c-f8f1-461b-b411-3767d8c6c945",
+    "updated_at": "2026-01-25 19:05:11.446933 +0000 +0000",
+    "user_id": "1812c44c-96b7-46d3-addb-c20a7fb35f76"
+  }
+]
+  Variables available: 
+   - skylerAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiIxODEyYzQ0Yy05NmI3LTQ2ZDMtYWRkYi1jMjBhN2ZiMzVmNzYiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.jSzXuvBlDagoBlzPgQjCAUMEu5Fk0u_xFOQzJuNptmY
+   - waltID: cacbd2c1-aaa8-4ec3-be7e-0d52c92a576e
+   - waltAccessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHkiLCJzdWIiOiJjYWNiZDJjMS1hYWE4LTRlYzMtYmU3ZS0wZDUyYzkyYTU3NmUiLCJleHAiOjE3NjkzNjc5MTEsImlhdCI6MTc2OTM2NDMxMX0.n7SzQABZ3LHvCcFw-57SeimJCB_yXqvwMMtiKa84e_o
+   - skylerID: 1812c44c-96b7-46d3-addb-c20a7fb35f76
+
+
+
+All tests passed! 🎉
+
+Return to your browser to continue with the next lesson.
+
