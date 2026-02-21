@@ -37,6 +37,7 @@ func readinessHandler(w http.ResponseWriter, r *http.Request) {
 
 func (cfg *apiConfig) middlewareMetricsInc(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("File server hit")
 		cfg.fileserverHits.Store(cfg.fileserverHits.Add(1))
 		next.ServeHTTP(w, r)
 	})
@@ -302,6 +303,7 @@ func (cfg *apiConfig) getChirpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *apiConfig) getChirpsHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Geting Chirps!")
 	queryParams := r.URL.Query()
 	sortOrder := queryParams.Get("sort")
 	authorID := queryParams.Get("author_id")
@@ -609,6 +611,11 @@ func (cfg *apiConfig) deleteChirpHandler(w http.ResponseWriter, r *http.Request)
 	w.WriteHeader(204)
 }
 
+func (cfg *apiConfig) getHealth(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Checking health")
+	w.WriteHeader(http.StatusOK)
+}
+
 func (cfg *apiConfig) setChirpyRedHandler(w http.ResponseWriter, r *http.Request) {
 	type hookData struct {
 		UserID string `json:"user_id"`
@@ -685,6 +692,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	port := os.Args[1]
+	portAddr := fmt.Sprintf(":%v", port)
+	fmt.Printf("Port addr: %v\n", portAddr)
 	dbQueries := database.New(db)
 	cfg := apiConfig{}
 	cfg.db = dbQueries
@@ -703,11 +713,12 @@ func main() {
 	mux.HandleFunc("DELETE /api/chirps/{chirpID}", cfg.deleteChirpHandler)
 	mux.HandleFunc("GET /api/chirps/{chirpID}", cfg.getChirpHandler)
 	mux.HandleFunc("GET /api/chirps", cfg.getChirpsHandler)
+	mux.HandleFunc("HEAD /health", cfg.getHealth)
 	mux.HandleFunc("GET /api/healthz", readinessHandler)
 	mux.HandleFunc("GET /admin/metrics", cfg.metricsHandler)
 	mux.HandleFunc("POST /admin/reset", cfg.resetHandler)
 	server := http.Server{
-		Addr:    ":8080",
+		Addr:    portAddr,
 		Handler: mux,
 	}
 	err = server.ListenAndServe()
