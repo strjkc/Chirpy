@@ -44,4 +44,4 @@ services:
     depends_on:
       api:
         condition: service_started
-    command: ["pytest", "-v"]
+    command: ["pytest", "--junitxml=reports/junit.xml"]

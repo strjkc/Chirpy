@@ -15,3 +15,9 @@ jobs:
       - name: Clean up
         if: always()
         run: docker compose -f compose.yaml down -v
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-junit-report
+          path: reports/junit.xml
