@@ -18,6 +18,11 @@ jobs:
         with:
           name: pytest-junit-report
           path: reports/junit.xml
+      - name: Publish JUnit report
+        if: always()
+        uses: mikepenz/action-junit-report@v5
+        with:
+          report_paths: reports/junit.xml
       - name: Clean up
         if: always()
         run: docker compose -f compose.yaml down -v
