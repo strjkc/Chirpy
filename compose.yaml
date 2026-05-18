@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chirpy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chirpy"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["goose", "-dir", "./sql/schema", "postgres", "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable", "up"]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable"
+      KEY: "YXNpZGZpb3F3aWVua3p4Y3Y7a2phb2lkZmhpb3Bxd25lYWprYmRna2phaHNkamZo"
+      POLKA_KEY: "f271c81ff7084ee5b99a5091b42d486e"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    command: ["./server", "8080" ]
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile_test
+    environment:
+      BASE_URL: http://api:8080
+    depends_on:
+      api:
+        condition: service_started
+    command: ["pytest", "-v"]

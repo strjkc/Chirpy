@@ -149,6 +149,7 @@ func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
 	request := req{}
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&request)
+	fmt.Printf("Error %v", err)
 	if err != nil {
 		jsonResponseError(w, 500, "An Error occured")
 		return
@@ -168,6 +169,7 @@ func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	createdUser, err := cfg.db.CreateUser(r.Context(), params)
+	fmt.Printf("Error %v", err)
 	if err != nil {
 		jsonResponseError(w, 500, "An Error occured")
 		return
@@ -182,6 +184,7 @@ func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err := json.Marshal(response)
+	fmt.Printf("Error %v", err)
 	if err != nil {
 		jsonResponseError(w, 500, "An Error occured")
 		return
@@ -192,6 +195,7 @@ func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *apiConfig) createChirpHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Sprintf("Chirps api hit")
 	type request struct {
 		Body string `json:"body"`
 		// UserID string `json:"user_id"`
@@ -683,7 +687,7 @@ func (cfg *apiConfig) setChirpyRedHandler(w http.ResponseWriter, r *http.Request
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
-		panic(err)
+		fmt.Println("No .env file present")
 	}
 	dbURL := os.Getenv("DB_URL")
 	key := os.Getenv("KEY")
