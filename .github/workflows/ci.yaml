@@ -12,12 +12,12 @@ jobs:
         run: docker compose -f compose.yaml run --rm migrate
       - name: Run API tests
         run: docker compose -f compose.yaml up --build --exit-code-from tests api tests
-      - name: Clean up
-        if: always()
-        run: docker compose -f compose.yaml down -v
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-junit-report
           path: reports/junit.xml
+      - name: Clean up
+        if: always()
+        run: docker compose -f compose.yaml down -v
