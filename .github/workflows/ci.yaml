@@ -24,7 +24,7 @@ jobs:
         with:
           report_paths: reports/junit.xml
       - name: Upload HTML Report Artifact
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-reports
           path: reports/test_report.html
