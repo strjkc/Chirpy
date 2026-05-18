@@ -46,4 +46,4 @@ services:
         condition: service_started
     volumes:
       - ./reports/:/app/reports
-    command: ["pytest", "--junitxml=reports/junit.xml"]
+    command: ["pytest", "--junitxml=reports/junit.xml", "--html=reports/test_report.html"]
