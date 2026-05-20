@@ -2,3 +2,4 @@ server
 .venv
 .idea
 chirpy
+*__pycache__*

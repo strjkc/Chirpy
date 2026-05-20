@@ -1,6 +1,6 @@
 import uuid
 import os
-from tests.client import Client
+from tests.http_client import Client
 
 def get_valid_user():
     return {
@@ -35,3 +35,11 @@ def create_user_and_log_in():
     user = create_user()
     logged_in_user = log_in(user)
     return logged_in_user
+
+def create_chrip(http_client, logged_in_user):
+    user = logged_in_user
+    payload = {
+        "body": f"{uuid.uuid4()}"
+    }
+    status, body = http_client.post("/api/chirps", payload=payload, token=user.get("token"))
+    return body
