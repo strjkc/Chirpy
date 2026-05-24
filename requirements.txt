@@ -3,5 +3,5 @@ pytest-mock>=3.15.1
 requests>=2.34.2
 python-dotenv>=1.2.2
 pytest-html>=4.2.0
-psycopg[bin]>=3.3.4
+psycopg[binary]>=3.3.4
 locust>=2.44.0
