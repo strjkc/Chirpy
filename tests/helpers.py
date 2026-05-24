@@ -1,6 +1,6 @@
 import uuid
 import os
-from tests.http_client import Client
+from api.http_client import Client
 
 def get_valid_user():
     return {

@@ -1,4 +1,4 @@
-import tests.helpers as helpers
+import helpers as helpers
 
 #x mux.HandleFunc("POST /api/validate_chirp", handlerPostChirp)
 

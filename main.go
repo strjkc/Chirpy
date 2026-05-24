@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -11,7 +13,10 @@ import (
 	"sync/atomic"
 	"time"
 
+	_ "net/http/pprof"
+
 	"github.com/strjkc/chirpy/internal/auth"
+	"github.com/strjkc/chirpy/internal/customErrors"
 
 	"github.com/google/uuid"
 
@@ -20,6 +25,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/strjkc/chirpy/internal/database"
+	user "github.com/strjkc/chirpy/users"
 )
 
 type apiConfig struct {
@@ -27,6 +33,8 @@ type apiConfig struct {
 	db             *database.Queries
 	keyb64         string
 	polkaApiKey    string
+	userService    *user.UserService
+	authService    *auth.AuthService
 }
 
 func readinessHandler(w http.ResponseWriter, r *http.Request) {
@@ -155,30 +163,34 @@ func (cfg *apiConfig) usersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPass, err := auth.HashPassword(request.Password)
+	var cerr customErrors.Error
+	createdUser, err := cfg.userService.CreateUser(r.Context(), user.UserInput{request.Email, request.Password})
 	if err != nil {
-		jsonResponseError(w, 500, "An Error occured, user not created")
-	}
-
-	params := database.CreateUserParams{
-		ID:             uuid.New(),
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
-		Email:          request.Email,
-		HashedPassword: hashedPass,
-	}
-
-	createdUser, err := cfg.db.CreateUser(r.Context(), params)
-	fmt.Printf("Error %v", err)
-	if err != nil {
-		jsonResponseError(w, 500, "An Error occured")
-		return
+		if errors.As(err, &cerr) {
+			switch cerr.Type {
+			case customErrors.InternalError:
+				jsonResponseError(w, 500, err.Error())
+				return
+			case customErrors.ValidationError:
+				jsonResponseError(w, 400, err.Error())
+				return
+			case customErrors.NotAuthenticated:
+				jsonResponseError(w, 401, err.Error())
+				return
+			case customErrors.NotAuthorized:
+				jsonResponseError(w, 403, err.Error())
+				return
+			default:
+				jsonResponseError(w, 500, err.Error())
+				return
+			}
+		}
 	}
 
 	response := res{
-		ID:          createdUser.ID.String(),
-		CreatedAt:   createdUser.CreatedAt.String(),
-		UpdatedAt:   createdUser.UpdatedAt.String(),
+		ID:          createdUser.ID,
+		CreatedAt:   createdUser.CreatedAt,
+		UpdatedAt:   createdUser.UpdatedAt,
 		Email:       createdUser.Email,
 		IsChirpyRed: createdUser.IsChirpyRed,
 	}
@@ -215,7 +227,7 @@ func (cfg *apiConfig) createChirpHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	userID, err := auth.ValidateJWT(token, cfg.keyb64)
+	userID, err := cfg.authService.ValidateJWT(token)
 	if err != nil {
 		jsonResponseError(w, 401, err.Error())
 		return
@@ -532,7 +544,7 @@ func (cfg *apiConfig) updateUsersHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	uuid, err := auth.ValidateJWT(tkn, cfg.keyb64)
+	uuid, err := cfg.authService.ValidateJWT(tkn)
 	if err != nil {
 		jsonResponseError(w, 401, "Invalid token")
 		return
@@ -590,7 +602,7 @@ func (cfg *apiConfig) deleteChirpHandler(w http.ResponseWriter, r *http.Request)
 	}
 	chirpId, err := uuid.Parse(r.PathValue("chirpID"))
 
-	uuid, err := auth.ValidateJWT(token, cfg.keyb64)
+	uuid, err := cfg.authService.ValidateJWT(token)
 	if err != nil {
 		jsonResponseError(w, 401, "Invalid token")
 		return
@@ -704,6 +716,10 @@ func main() {
 	cfg.db = dbQueries
 	cfg.keyb64 = key
 	cfg.polkaApiKey = polkaKey
+	authService := auth.NewAuthService(key)
+	userService := user.NewUserService(dbQueries, *authService)
+	cfg.userService = userService
+	cfg.authService = authService
 	mux := http.NewServeMux()
 	mux.Handle("/app/", http.StripPrefix("/app/", cfg.middlewareMetricsInc(http.FileServer(http.Dir(".")))))
 	mux.HandleFunc("POST /api/users", cfg.usersHandler)
@@ -721,6 +737,9 @@ func main() {
 	mux.HandleFunc("GET /api/healthz", readinessHandler)
 	mux.HandleFunc("GET /admin/metrics", cfg.metricsHandler)
 	mux.HandleFunc("POST /admin/reset", cfg.resetHandler)
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 	server := http.Server{
 		Addr:    portAddr,
 		Handler: mux,

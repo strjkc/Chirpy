@@ -1,5 +1,5 @@
 import pytest
-import tests.helpers as helpers
+import helpers as helpers
 from user_test_cases import create_user_negative_cases, login_user_negative_cases
 
 @pytest.fixture

@@ -1,9 +1,9 @@
 import os
 import pytest
-from tests.db_client import DbClient
-from tests.http_client import Client
+from chirps.db_client import DbClient
+from api.http_client import Client
 from dotenv import load_dotenv
-import tests.helpers as helpers
+import helpers as helpers
 
 load_dotenv()
 

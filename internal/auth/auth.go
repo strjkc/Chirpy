@@ -15,9 +15,19 @@ import (
 	"github.com/google/uuid"
 )
 
+type AuthService struct {
+	secret string
+}
+
+func NewAuthService(key string) *AuthService {
+	return &AuthService{
+		secret: key,
+	}
+}
+
 func HashPassword(password string) (string, error) {
 	params := argon2id.Params{
-		Memory:      128 * 1024,
+		Memory:      128 * 5,
 		Iterations:  10,
 		Parallelism: uint8(runtime.NumCPU()),
 		SaltLength:  16,
@@ -64,9 +74,9 @@ func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (str
 	return signedToken, nil
 }
 
-func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
+func (a *AuthService) ValidateJWT(tokenString string) (uuid.UUID, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (any, error) {
-		key, err := base64.StdEncoding.DecodeString(tokenSecret)
+		key, err := base64.StdEncoding.DecodeString(a.secret)
 		if err != nil {
 			return "", err
 		}

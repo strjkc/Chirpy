@@ -1,5 +1,5 @@
 import pytest
-import tests.helpers as helpers
+import helpers as helpers
 
 @pytest.fixture
 def cleanup_chirps(db_connection):
