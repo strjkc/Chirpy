@@ -7,6 +7,6 @@ COPY assets ./assets
 COPY internal ./internal
 COPY sql ./sql
 COPY sqlc.yaml ./sqlc.yaml
-CPOY users ./users
+COPY users ./users
 RUN go build -o server .
 EXPOSE 8080
