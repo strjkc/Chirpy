@@ -3,8 +3,8 @@ from psycopg import sql
 
 
 class DbClient:
-    def __init__(self, db_host, db_name, db_user):
-        self.client = psycopg.connect(f"host={db_host} dbname={db_name} user={db_user}")
+    def __init__(self, conn_str):
+        self.client = psycopg.connect(conn_str)
 
     def select_cell(self, table, column, where_colum, where_value):
         with self.client.cursor() as curr:
