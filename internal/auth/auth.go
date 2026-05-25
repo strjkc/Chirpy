@@ -13,6 +13,7 @@ import (
 	"github.com/alexedwards/argon2id"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/strjkc/chirpy/internal/customErrors"
 )
 
 type AuthService struct {
@@ -100,13 +101,13 @@ func (a *AuthService) ValidateJWT(tokenString string) (uuid.UUID, error) {
 func GetBearerToken(headers http.Header) (string, error) {
 	brToken := headers.Get("Authorization")
 	if len(brToken) < 1 {
-		return "", fmt.Errorf("Token not submited or invalid format")
+		return "", customErrors.NewError(customErrors.NotAuthenticated, "Invalid token")
 	}
 	arr := strings.Split(brToken, " ")
 
 	token := arr[1]
 	if len(token) < 1 {
-		return "", fmt.Errorf("Token Ivalid")
+		return "", customErrors.NewError(customErrors.NotAuthenticated, "Invalid token")
 	}
 	return token, nil
 }

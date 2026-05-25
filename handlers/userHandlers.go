@@ -4,15 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
-	"github.com/strjkc/chirpy/config"
 	"github.com/strjkc/chirpy/internal/auth"
-	"github.com/strjkc/chirpy/internal/database"
+	user "github.com/strjkc/chirpy/users"
 )
 
-func (cfg *config.ApiConfig) createUsersHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) CreateUsersHandler(w http.ResponseWriter, r *http.Request) {
 	type req struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -31,34 +28,19 @@ func (cfg *config.ApiConfig) createUsersHandler(w http.ResponseWriter, r *http.R
 	err := decoder.Decode(&request)
 	fmt.Printf("Error %v", err)
 	if err != nil {
-		jsonResponseError(w, 500, "An Error occured")
+		jsonResponseError(w, err)
 		return
 	}
 
-	hashedPass, err := auth.HashPassword(request.Password)
+	createdUser, err := h.service.CreateUser(r.Context(), user.UserInput{request.Email, request.Password})
 	if err != nil {
-		jsonResponseError(w, 500, "An Error occured, user not created")
-	}
-
-	params := database.CreateUserParams{
-		ID:             uuid.New(),
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
-		Email:          request.Email,
-		HashedPassword: hashedPass,
-	}
-
-	createdUser, err := cfg.db.CreateUser(r.Context(), params)
-	fmt.Printf("Error %v", err)
-	if err != nil {
-		jsonResponseError(w, 500, "An Error occured")
-		return
+		jsonResponseError(w, err)
 	}
 
 	response := res{
-		ID:          createdUser.ID.String(),
-		CreatedAt:   createdUser.CreatedAt.String(),
-		UpdatedAt:   createdUser.UpdatedAt.String(),
+		ID:          createdUser.ID,
+		CreatedAt:   createdUser.CreatedAt,
+		UpdatedAt:   createdUser.UpdatedAt,
 		Email:       createdUser.Email,
 		IsChirpyRed: createdUser.IsChirpyRed,
 	}
@@ -66,7 +48,7 @@ func (cfg *config.ApiConfig) createUsersHandler(w http.ResponseWriter, r *http.R
 	data, err := json.Marshal(response)
 	fmt.Printf("Error %v", err)
 	if err != nil {
-		jsonResponseError(w, 500, "An Error occured")
+		jsonResponseError(w, err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -74,7 +56,7 @@ func (cfg *config.ApiConfig) createUsersHandler(w http.ResponseWriter, r *http.R
 	w.Write(data)
 }
 
-func (cfg *apiConfig) updateUsersHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) UpdateUsersHandler(w http.ResponseWriter, r *http.Request) {
 	type req struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -90,52 +72,34 @@ func (cfg *apiConfig) updateUsersHandler(w http.ResponseWriter, r *http.Request)
 
 	tkn, err := auth.GetBearerToken(r.Header)
 	if err != nil {
-		jsonResponseError(w, 401, "Invalid token")
-		return
-	}
-
-	uuid, err := auth.ValidateJWT(tkn, cfg.keyb64)
-	if err != nil {
-		jsonResponseError(w, 401, "Invalid token")
+		jsonResponseError(w, err)
 		return
 	}
 
 	requestData := req{}
 	err = json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
-		jsonResponseError(w, 500, "Internal error")
+		jsonResponseError(w, err)
 		return
 	}
 
-	if len(requestData.Email) < 4 {
-		jsonResponseError(w, 404, "Invalid email")
-		return
-	}
-
-	// unslafe code, if attacker grabs token he can change my pass, email format is not validated
-	hashedPass, err := auth.HashPassword(requestData.Password)
+	updatedUser, err := h.service.UpdateUser(r.Context(), user.UserInput{requestData.Email, requestData.Password}, tkn)
 	if err != nil {
-		jsonResponseError(w, 500, "Internal error")
-		return
-	}
-
-	dbUser, err := cfg.db.UpdateUser(r.Context(), database.UpdateUserParams{ID: uuid, HashedPassword: hashedPass, Email: requestData.Email})
-	if err != nil {
-		jsonResponseError(w, 500, "Internal error")
+		jsonResponseError(w, err)
 		return
 	}
 
 	respData := res{
-		ID:          dbUser.ID.String(),
-		CreatedAt:   dbUser.CreatedAt.String(),
-		UpdatedAt:   dbUser.UpdatedAt.String(),
-		Email:       dbUser.Email,
-		IsChirpyRed: dbUser.IsChirpyRed,
+		ID:          updatedUser.ID,
+		CreatedAt:   updatedUser.CreatedAt,
+		UpdatedAt:   updatedUser.UpdatedAt,
+		Email:       updatedUser.Email,
+		IsChirpyRed: updatedUser.IsChirpyRed,
 	}
 
 	response, err := json.Marshal(respData)
 	if err != nil {
-		jsonResponseError(w, 500, "Internal error")
+		jsonResponseError(w, err)
 		return
 	}
 

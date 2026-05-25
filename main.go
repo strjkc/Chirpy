@@ -15,6 +15,7 @@ import (
 
 	_ "net/http/pprof"
 
+	"github.com/strjkc/chirpy/handlers"
 	"github.com/strjkc/chirpy/internal/auth"
 	"github.com/strjkc/chirpy/internal/customErrors"
 
@@ -720,10 +721,11 @@ func main() {
 	userService := user.NewUserService(dbQueries, *authService)
 	cfg.userService = userService
 	cfg.authService = authService
+	handlers := handlers.NewHandlers(authService, userService)
 	mux := http.NewServeMux()
 	mux.Handle("/app/", http.StripPrefix("/app/", cfg.middlewareMetricsInc(http.FileServer(http.Dir(".")))))
-	mux.HandleFunc("POST /api/users", cfg.usersHandler)
-	mux.HandleFunc("PUT /api/users", cfg.updateUsersHandler)
+	mux.HandleFunc("POST /api/users", handlers.CreateUsersHandler)
+	mux.HandleFunc("PUT /api/users", handlers.UpdateUsersHandler)
 	mux.HandleFunc("POST /api/login", cfg.loginHandler)
 	mux.HandleFunc("POST /api/refresh", cfg.refreshHandler)
 	mux.HandleFunc("POST /api/revoke", cfg.revokeHandler)
