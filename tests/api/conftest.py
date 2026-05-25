@@ -1,11 +1,14 @@
 import os
+
 import pytest
-from chirps.db_client import DbClient
-from api.http_client import Client
 from dotenv import load_dotenv
-import helpers as helpers
+
+import tests.helpers as helpers
+from tests.api.db_client import DbClient
+from tests.api.http_client import Client
 
 load_dotenv()
+
 
 @pytest.fixture(scope="module")
 def http_client():
@@ -13,17 +16,20 @@ def http_client():
     http_client = Client(base_url)
     return http_client
 
+
 @pytest.fixture(scope="module")
 def db_connection():
     client = DbClient("chirpy", "postgres")
     yield client
     client.close()
 
+
 @pytest.fixture
 def create_user(http_client, valid_user, db_connection):
     user = helpers.create_user()
-    yield  user
+    yield user
     db_connection.cleanup("users", "email", user.get("email"))
+
 
 @pytest.fixture
 def cleanup_users(db_connection):
@@ -31,6 +37,7 @@ def cleanup_users(db_connection):
     yield users_to_del
     for user in users_to_del:
         db_connection.cleanup("users", "email", user.get("email"))
+
 
 @pytest.fixture
 def crt_usr_and_login(http_client, db_connection):
