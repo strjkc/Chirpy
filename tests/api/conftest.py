@@ -19,7 +19,8 @@ def http_client():
 
 @pytest.fixture(scope="module")
 def db_connection():
-    client = DbClient("chirpy", "postgres")
+    db_host = os.getenv("DB_HOST")
+    client = DbClient(db_host, "chirpy", "postgres")
     yield client
     client.close()
 

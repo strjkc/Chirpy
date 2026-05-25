@@ -18,13 +18,22 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: ["goose", "-dir", "./sql/schema", "postgres", "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable", "up"]
+    command:
+      [
+        "goose",
+        "-dir",
+        "./sql/schema",
+        "postgres",
+        "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable",
+        "up",
+      ]
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
+      DB_HOST: db
       DB_URL: "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable"
       KEY: "YXNpZGZpb3F3aWVua3p4Y3Y7a2phb2lkZmhpb3Bxd25lYWprYmRna2phaHNkamZo"
       POLKA_KEY: "f271c81ff7084ee5b99a5091b42d486e"
@@ -33,7 +42,7 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
-    command: ["./server", "8080" ]
+    command: ["./server", "8080"]
 
   tests:
     build:
@@ -46,4 +55,9 @@ services:
         condition: service_started
     volumes:
       - ./reports/:/app/reports
-    command: ["pytest", "--junitxml=reports/junit.xml", "--html=reports/test_report.html"]
+    command:
+      [
+        "pytest",
+        "--junitxml=reports/junit.xml",
+        "--html=reports/test_report.html",
+      ]
