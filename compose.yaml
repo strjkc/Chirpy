@@ -50,6 +50,7 @@ services:
       dockerfile: Dockerfile_test
     environment:
       BASE_URL: http://api:8080
+      DB_URL: "postgres://postgres:postgres@db:5432/chirpy?sslmode=disable"
     depends_on:
       api:
         condition: service_started
